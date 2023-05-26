@@ -35,6 +35,7 @@ app.get('/', (request, response) => {
   
 app.get('/api/db', (request, response) => {
     response.json(db);
+    console.log(response.json(db));
   });
 
 
