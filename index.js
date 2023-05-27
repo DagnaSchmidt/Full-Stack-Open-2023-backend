@@ -64,6 +64,28 @@ app.get('/api/db', (request, response) => {
     console.log(response.json(db));
   });
 
+app.post('/api/db', (request, response) => {
+    const body = request.body;
+    const name = body.content.name;
+    const number = body.content.number;
+  
+    if (!body.content) {
+      return response.status(400).json({ 
+        error: 'content missing' 
+      });
+    }
+  
+    const person = {
+        id: uid(),
+        name: name,
+        number: number,
+    };
+  
+    db = db.concat(person);
+  
+    response.json(person);
+  })
+
 
 const PORT = 3001;
 
