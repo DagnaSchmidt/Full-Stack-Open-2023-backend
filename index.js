@@ -51,6 +51,13 @@ app.get('/api/db/:id', (request, response) => {
     }
   });
 
+app.delete('/api/db/:id', (request, response) => {
+    const id = Number(request.params.id);
+    db = db.filter(note => note.id !== id);
+  
+    response.status(204).end();
+  });
+
   
 app.get('/api/db', (request, response) => {
     response.json(db);
