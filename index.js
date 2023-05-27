@@ -32,6 +32,12 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
   });
 
+app.get('/info', (request, response) => {
+    const persons = db.length;
+    const date = new Date();
+    response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
+  });
+
   
 app.get('/api/db', (request, response) => {
     response.json(db);
