@@ -32,10 +32,59 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
   });
 
+app.get('/info', (request, response) => {
+    const persons = db.length;
+    const date = new Date();
+    response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
+  });
+
+app.get('/api/db/:id', (request, response) => {
+    const id = Number(request.params.id);
+    const person = db.filter(person => person.id === id);
+    console.log(person);
+    console.log(typeof(person));
+
+    if(person.length !== 0){
+        response.json(person);
+    }else{
+        response.status(404).end();
+    }
+  });
+
+app.delete('/api/db/:id', (request, response) => {
+    const id = Number(request.params.id);
+    db = db.filter(note => note.id !== id);
+  
+    response.status(204).end();
+  });
+
   
 app.get('/api/db', (request, response) => {
     response.json(db);
+    console.log(response.json(db));
   });
+
+app.post('/api/db', (request, response) => {
+    const body = request.body;
+    const name = body.content.name;
+    const number = body.content.number;
+  
+    if (!body.content) {
+      return response.status(400).json({ 
+        error: 'content missing' 
+      });
+    }
+  
+    const person = {
+        id: uid(),
+        name: name,
+        number: number,
+    };
+  
+    db = db.concat(person);
+  
+    response.json(person);
+  })
 
 
 const PORT = 3001;
