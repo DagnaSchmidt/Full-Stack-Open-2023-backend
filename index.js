@@ -38,6 +38,19 @@ app.get('/info', (request, response) => {
     response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
   });
 
+app.get('/api/db/:id', (request, response) => {
+    const id = Number(request.params.id);
+    const person = db.filter(person => person.id === id);
+    console.log(person);
+    console.log(typeof(person));
+
+    if(person.length !== 0){
+        response.json(person);
+    }else{
+        response.status(404).end();
+    }
+  });
+
   
 app.get('/api/db', (request, response) => {
     response.json(db);
