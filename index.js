@@ -1,7 +1,11 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import Person from './models/person.js';
+
+dotenv.config();
 
 const userPassword = process.env.USER_PASSWORD;
 
@@ -9,14 +13,6 @@ const url = `mongodb+srv://dagdagi889:${userPassword}@cluster0.qjeojyb.mongodb.n
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  phone: Number
-});
-
-const Person = mongoose.model('Person', personSchema);
-
 
 const app = express();
 
@@ -81,16 +77,21 @@ app.get('/api/db', (req, res) => {
 //     console.log(response.json(db));
 //   });
 
-app.get('/api/db/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = db.filter(person => person.id === id);
 
-    if(person.length !== 0){
-        response.json(person);
-    }else{
-        response.status(404).end();
-    }
-  });
+app.get('/api/db/:id', (request, response) => {
+  Person.findById(request.params.id)
+    .then(person => response.json(person));
+})
+// app.get('/api/db/:id', (request, response) => {
+//     const id = Number(request.params.id);
+//     const person = db.filter(person => person.id === id);
+
+//     if(person.length !== 0){
+//         response.json(person);
+//     }else{
+//         response.status(404).end();
+//     }
+//   });
 
 app.delete('/api/db/:id', (request, response) => {
     const id = Number(request.params.id);
@@ -99,40 +100,61 @@ app.delete('/api/db/:id', (request, response) => {
     response.status(204).end();
   });
 
-app.post('/api/db', (request, response) => {
-    const body = request.body;
-    const name = body.content.name;
-    const number = body.content.number;
 
-    const check = () => {
-        for(let i = 0; i < db.length; i++){
-            if(name === db[i].name){
-                return false;
-            }
-        }
-    }
-  
-    if (!body.content || !name || !number) {
-      return response.status(400).json({ 
-        error: 'content missing' 
-      });
-    }
-    if(check() === false){
-        return response.status(404).json({
-            error: 'name already exist in phone book'
+app.post('/api/db', (request, response) => {
+      const body = request.body;
+      const name = body.content.name;
+      const phone = body.content.phone;
+
+      if (!body.content || !name || !phone) {
+        return response.status(400).json({ 
+          error: 'content missing' 
         });
-    }
-  
-    const person = {
-        id: Math.floor(Math.random() * 100000),
+      }
+
+      const person = new Person({
         name: name,
-        number: number
-    };
+        phone: phone
+      })
+
+      person.save().then(savedPerson => {
+        response.json(savedPerson);
+      })
+  });
+// app.post('/api/db', (request, response) => {
+//     const body = request.body;
+//     const name = body.content.name;
+//     const number = body.content.number;
+
+//     const check = () => {
+//         for(let i = 0; i < db.length; i++){
+//             if(name === db[i].name){
+//                 return false;
+//             }
+//         }
+//     }
   
-    db = db.concat(person);
+//     if (!body.content || !name || !number) {
+//       return response.status(400).json({ 
+//         error: 'content missing' 
+//       });
+//     }
+//     if(check() === false){
+//         return response.status(404).json({
+//             error: 'name already exist in phone book'
+//         });
+//     }
   
-    response.json(person);
-  })
+//     const person = {
+//         id: Math.floor(Math.random() * 100000),
+//         name: name,
+//         number: number
+//     };
+  
+//     db = db.concat(person);
+  
+//     response.json(person);
+//   })
 
 const PORT = process.env.PORT || 3001;
 

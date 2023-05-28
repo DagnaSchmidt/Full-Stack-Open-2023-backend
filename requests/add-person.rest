@@ -4,6 +4,6 @@ Content-Type: application/json
 {
     "content" : {
         "name" : "Evan J",
-        "number" : "888 999 777"
+        "phone" : "888999777"
     }
 }
