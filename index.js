@@ -4,6 +4,7 @@ import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(express.static('build'));
 app.use(cors());
 
 morgan.token('data', function getData (req) { return JSON.stringify(req.body.content) });
@@ -112,8 +113,8 @@ app.post('/api/db', (request, response) => {
   })
 
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`);
 });
