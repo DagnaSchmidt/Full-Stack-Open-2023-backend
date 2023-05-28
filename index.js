@@ -3,7 +3,10 @@ import morgan from 'morgan';
 const app = express();
 
 app.use(express.json());
-app.use(morgan('combined'));
+
+morgan.token('data', function getData (req) { return JSON.stringify(req.body.content) });
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
 let db = [
     { 
