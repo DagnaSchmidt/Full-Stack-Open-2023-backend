@@ -103,10 +103,10 @@ app.delete('/api/db/:id', (request, response) => {
 
 app.post('/api/db', (request, response) => {
       const body = request.body;
-      const name = body.content.name;
-      const phone = body.content.phone;
+      const name = body.name;
+      const phone = Number(body.phone);
 
-      if (!body.content || !name || !phone) {
+      if (!body || !name || !phone) {
         return response.status(400).json({ 
           error: 'content missing' 
         });
