@@ -1,8 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
-const app = express();
+import cors from 'cors';
 
+const app = express();
 app.use(express.json());
+app.use(cors());
 
 morgan.token('data', function getData (req) { return JSON.stringify(req.body.content) });
 
