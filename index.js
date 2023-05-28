@@ -1,6 +1,21 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import mongoose from 'mongoose';
+
+const userPassword = process.env.USER_PASSWORD;
+
+const url = `mongodb+srv://dagdagi889:${userPassword}@cluster0.qjeojyb.mongodb.net/PhoneBook?retryWrites=true&w=majority`;
+
+mongoose.set('strictQuery', false);
+mongoose.connect(url);
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  phone: Number
+});
+
+const Person = mongoose.model('Person', personSchema);
 
 
 const app = express();
@@ -56,10 +71,15 @@ app.get('/info', (request, response) => {
     response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
   });
 
-app.get('/api/db', (request, response) => {
-    response.json(db);
-    console.log(response.json(db));
-  });
+app.get('/api/db', (req, res) => {
+  Person.find({}).then(persons => {
+    res.json(persons);
+  })
+});
+// app.get('/api/db', (request, response) => {
+//     response.json(db);
+//     console.log(response.json(db));
+//   });
 
 app.get('/api/db/:id', (request, response) => {
     const id = Number(request.params.id);
