@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const userPassword = process.env.USER_PASSWORD;
+// const userPassword = process.env.USER_PASSWORD;
 
 if (process.argv.length<3) {
     console.log('give password as argument')
@@ -8,27 +8,36 @@ if (process.argv.length<3) {
   }
   
 const password = process.argv[2];
+const name = process.argv[3];
+const phone = process.argv[4];
   
-const url = `mongodb+srv://dagdagi889:${userPassword}@cluster0.qjeojyb.mongodb.net/?retryWrites=true&w=majority`
+const url = `mongodb+srv://dagdagi889:${password}@cluster0.qjeojyb.mongodb.net/PhoneBook?retryWrites=true&w=majority`
   
   mongoose.set('strictQuery',false);
   mongoose.connect(url);
   
   const personSchema = new mongoose.Schema({
     name: String,
-    phone: Number,
-    id: Number
+    phone: Number
   });
   
-  const Person = mongoose.model('Note', personSchema);
+  const Person = mongoose.model('Person', personSchema);
   
-  const personExample = new Person({
-        id: 1,
-        name: "Arto Hellas", 
-        phone: "040-123456"
+  const person = new Person({
+        name: name, 
+        phone: phone
   });
-  
-  personExample.save().then(result => {
-    console.log('person added!');
-    mongoose.connection.close();
-  })
+
+  if(!name && !phone){
+    Person.find({}).then(result => {
+        result.forEach(person => {
+          console.log(person)
+        })
+        mongoose.connection.close()
+      })
+  }else{
+    person.save().then(result => {
+        console.log(`added ${name} number ${phone} to phone book`);
+        mongoose.connection.close();
+      });
+  }
