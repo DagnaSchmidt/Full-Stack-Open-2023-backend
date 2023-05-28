@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 const app = express();
+
 app.use(express.json());
 app.use(express.static('build'));
 app.use(cors());
@@ -104,14 +105,13 @@ app.post('/api/db', (request, response) => {
     const person = {
         id: Math.floor(Math.random() * 100000),
         name: name,
-        number: number,
+        number: number
     };
   
     db = db.concat(person);
   
     response.json(person);
   })
-
 
 const PORT = process.env.PORT || 3001;
 
