@@ -3,7 +3,6 @@ Content-Type: application/json
 
 {
     "content" : {
-        "name" : "Dan Abramov",
-        "number" : "888 999 777"
+        "name" : "Dagna Schmidt"
     }
 }

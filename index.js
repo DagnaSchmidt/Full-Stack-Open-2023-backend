@@ -1,5 +1,4 @@
 import express from 'express';
-import { uid } from 'uid';
 const app = express();
 
 app.use(express.json());
@@ -27,7 +26,6 @@ let db = [
     }
 ];
 
-
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
   });
@@ -38,11 +36,14 @@ app.get('/info', (request, response) => {
     response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
   });
 
+app.get('/api/db', (request, response) => {
+    response.json(db);
+    console.log(response.json(db));
+  });
+
 app.get('/api/db/:id', (request, response) => {
     const id = Number(request.params.id);
     const person = db.filter(person => person.id === id);
-    console.log(person);
-    console.log(typeof(person));
 
     if(person.length !== 0){
         response.json(person);
@@ -58,25 +59,32 @@ app.delete('/api/db/:id', (request, response) => {
     response.status(204).end();
   });
 
-  
-app.get('/api/db', (request, response) => {
-    response.json(db);
-    console.log(response.json(db));
-  });
-
 app.post('/api/db', (request, response) => {
     const body = request.body;
     const name = body.content.name;
     const number = body.content.number;
+
+    const check = () => {
+        for(let i = 0; i < db.length; i++){
+            if(name === db[i].name){
+                return false;
+            }
+        }
+    }
   
-    if (!body.content) {
+    if (!body.content || !name || !number) {
       return response.status(400).json({ 
         error: 'content missing' 
       });
     }
+    if(check() === false){
+        return response.status(404).json({
+            error: 'name already exist in phone book'
+        });
+    }
   
     const person = {
-        id: uid(),
+        id: Math.floor(Math.random() * 100000),
         name: name,
         number: number,
     };
