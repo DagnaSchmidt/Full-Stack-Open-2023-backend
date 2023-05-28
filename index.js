@@ -1,7 +1,15 @@
 import express from 'express';
-const app = express();
+import morgan from 'morgan';
+import cors from 'cors';
 
+const app = express();
 app.use(express.json());
+app.use(express.static('build'));
+app.use(cors());
+
+morgan.token('data', function getData (req) { return JSON.stringify(req.body.content) });
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
 let db = [
     { 
@@ -25,6 +33,16 @@ let db = [
       "number": "39-23-6423122"
     }
 ];
+
+morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms'
+    ].join(' ')
+  });
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
@@ -95,8 +113,8 @@ app.post('/api/db', (request, response) => {
   })
 
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`);
 });
