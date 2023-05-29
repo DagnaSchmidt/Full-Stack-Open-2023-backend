@@ -18,16 +18,16 @@ app.use(express.static('build'));
 app.use(express.json());
 app.use(cors());
 
-morgan.token('data', function getData (req) { return JSON.stringify(req.body.content) });
+morgan.token('data', function getData (req) { return JSON.stringify(req.body.content);});
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 morgan(function (tokens, req, res) {
-  return [
+    return [
     tokens.method(req, res),
     tokens.url(req, res),
     tokens.status(req, res),
     tokens.res(req, res, 'content-length'), '-',
     tokens['response-time'](req, res), 'ms'
-  ].join(' ')
+  ].join(' ');
 });
 
 // let db = [
@@ -54,13 +54,13 @@ morgan(function (tokens, req, res) {
 // ];
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
+    console.error(error.message);
     if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'wrong format of id' })
+      return response.status(400).send({ error: 'wrong format of id' });
     }else if(error.name === 'ValidationError') {    
-      return response.status(400).json({ error: 'validation' })  
+      return response.status(400).json({ error: 'validation' });  
     }
-    next(error)
+    next(error);
   };
 
 app.get('/', (request, response) => {
@@ -77,7 +77,7 @@ app.get('/info', (request, response) => {
 app.get('/api/db', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons);
-  })
+  });
 });
 
 app.get('/api/db/:id', (request, response, next) => {
@@ -89,7 +89,7 @@ app.get('/api/db/:id', (request, response, next) => {
         response.status(404).end();
       }
     })
-    .catch(error => next(error))
+    .catch(error => next(error));
 });
 
 app.delete('/api/db/:id', (request, response, next) => {
@@ -97,7 +97,7 @@ app.delete('/api/db/:id', (request, response, next) => {
     .then(result => {
       response.status(204).end();
     })
-    .catch(error => next(error))
+    .catch(error => next(error));
 });
 
 app.post('/api/db', (request, response, next) => {
@@ -108,13 +108,13 @@ app.post('/api/db', (request, response, next) => {
       const person = new Person({
         name: name,
         phone: phone
-      })
+      });
 
       person.save()
       .then(savedPerson => {
         response.json(savedPerson);
       })
-      .catch(error => next(error))
+      .catch(error => next(error));
   });
 
 app.use(errorHandler);
