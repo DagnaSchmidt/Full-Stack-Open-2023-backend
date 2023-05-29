@@ -57,6 +57,14 @@ morgan(function (tokens, req, res) {
     ].join(' ')
   });
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'wrong format of id' })
+    } 
+    next(error)
+  };
+
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
   });
@@ -78,10 +86,17 @@ app.get('/api/db', (req, res) => {
 //   });
 
 
-app.get('/api/db/:id', (request, response) => {
+app.get('/api/db/:id', (request, response, next) => {
   Person.findById(request.params.id)
-    .then(person => response.json(person));
-})
+    .then(person => {
+      if(person){
+        response.json(person);
+      }else{
+        response.status(404).end();
+      }
+    })
+    .catch(error => next(error))
+});
 // app.get('/api/db/:id', (request, response) => {
 //     const id = Number(request.params.id);
 //     const person = db.filter(person => person.id === id);
@@ -155,6 +170,8 @@ app.post('/api/db', (request, response) => {
   
 //     response.json(person);
 //   })
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
