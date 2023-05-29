@@ -76,11 +76,6 @@ app.get('/api/db', (req, res) => {
     res.json(persons);
   })
 });
-// app.get('/api/db', (request, response) => {
-//     response.json(db);
-//     console.log(response.json(db));
-//   });
-
 
 app.get('/api/db/:id', (request, response, next) => {
   Person.findById(request.params.id)
@@ -93,16 +88,6 @@ app.get('/api/db/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 });
-// app.get('/api/db/:id', (request, response) => {
-//     const id = Number(request.params.id);
-//     const person = db.filter(person => person.id === id);
-
-//     if(person.length !== 0){
-//         response.json(person);
-//     }else{
-//         response.status(404).end();
-//     }
-//   });
 
 app.delete('/api/db/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
@@ -110,14 +95,7 @@ app.delete('/api/db/:id', (request, response, next) => {
       response.status(204).end();
     })
     .catch(error => next(error))
-})
-// app.delete('/api/db/:id', (request, response) => {
-//     const id = Number(request.params.id);
-//     db = db.filter(note => note.id !== id);
-  
-//     response.status(204).end();
-//   });
-
+});
 
 app.post('/api/db', (request, response) => {
       const body = request.body;
@@ -139,40 +117,6 @@ app.post('/api/db', (request, response) => {
         response.json(savedPerson);
       })
   });
-// app.post('/api/db', (request, response) => {
-//     const body = request.body;
-//     const name = body.content.name;
-//     const number = body.content.number;
-
-//     const check = () => {
-//         for(let i = 0; i < db.length; i++){
-//             if(name === db[i].name){
-//                 return false;
-//             }
-//         }
-//     }
-  
-//     if (!body.content || !name || !number) {
-//       return response.status(400).json({ 
-//         error: 'content missing' 
-//       });
-//     }
-//     if(check() === false){
-//         return response.status(404).json({
-//             error: 'name already exist in phone book'
-//         });
-//     }
-  
-//     const person = {
-//         id: Math.floor(Math.random() * 100000),
-//         name: name,
-//         number: number
-//     };
-  
-//     db = db.concat(person);
-  
-//     response.json(person);
-//   })
 
 app.use(errorHandler);
 
