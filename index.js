@@ -57,7 +57,9 @@ const errorHandler = (error, request, response, next) => {
     console.error(error.message)
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'wrong format of id' })
-    } 
+    }else if(error.name === 'ValidationError') {    
+      return response.status(400).json({ error: error.message })  
+    }
     next(error)
   };
 
@@ -98,25 +100,21 @@ app.delete('/api/db/:id', (request, response, next) => {
     .catch(error => next(error))
 });
 
-app.post('/api/db', (request, response) => {
+app.post('/api/db', (request, response, next) => {
       const body = request.body;
       const name = body.name;
       const phone = Number(body.phone);
-
-      if (!body || !name || !phone) {
-        return response.status(400).json({ 
-          error: 'content missing' 
-        });
-      }
 
       const person = new Person({
         name: name,
         phone: phone
       })
 
-      person.save().then(savedPerson => {
+      person.save()
+      .then(savedPerson => {
         response.json(savedPerson);
       })
+      .catch(error => next(error))
   });
 
 app.use(errorHandler);
