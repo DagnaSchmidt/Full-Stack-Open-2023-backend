@@ -22,7 +22,7 @@ const personSchema = new mongoose.Schema({
         },
         phone: {
             type: Number,
-            minLength: 1,
+            minLength: 3,
             required: true
         }
     });
