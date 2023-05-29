@@ -65,11 +65,12 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
   });
 
-// app.get('/info', (request, response) => {
-//     const persons = db.length;
-//     const date = new Date();
-//     response.send(`<p>Phone book have info for ${persons} persons</p><p>${date}</p>`);
-//   });
+app.get('/info', (request, response) => {
+    const date = new Date();
+  Person.find({}).then(persons => {
+    response.send(`<p>Phone book have info for ${persons.length} persons</p><p>${date}</p>`);
+    });
+  });
 
 app.get('/api/db', (req, res) => {
   Person.find({}).then(persons => {
