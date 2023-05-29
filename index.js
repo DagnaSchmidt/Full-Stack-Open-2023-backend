@@ -10,7 +10,7 @@ dotenv.config();
 const userPassword = process.env.USER_PASSWORD;
 const url = `mongodb+srv://dagdagi889:${userPassword}@cluster0.qjeojyb.mongodb.net/PhoneBook?retryWrites=true&w=majority`;
 mongoose.set('strictQuery', false);
-mongoose.connect(url);
+mongoose.connect(process.env.MONGODB_URL);
 
 const app = express();
 
