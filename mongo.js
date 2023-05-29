@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-// const userPassword = process.env.USER_PASSWORD;
-
 if (process.argv.length<3) {
     console.log('give password as argument')
     process.exit(1)

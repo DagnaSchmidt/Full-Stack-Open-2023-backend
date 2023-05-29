@@ -2,8 +2,6 @@ POST http://localhost:3001/api/db
 Content-Type: application/json
 
 {
-    "content" : {
-        "name" : "Evan J",
-        "number" : "888 999 777"
-    }
+        "name" : "Morgan J",
+        "phone" : "888999777"
 }
