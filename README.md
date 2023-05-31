@@ -1,5 +1,11 @@
 Challenges from course: Full-Stack-Open-2023 </br>
-https://fullstackopen.com/en/ </br>
-Part 3 - backend of Phonebook application </br>
+https://fullstackopen.com/en/ </br></br>
 
-demo: https://wvyk5e-3001.csb.app/
+Part 3 - backend of Phonebook application </br>
+demo: https://wvyk5e-3001.csb.app/ </br></br>
+
+Other parts:</br>
+Part 0 - 2:</br>
+https://github.com/DagnaSchmidt/Full-Stack-Open-2023</br>
+Part 4:</br>
+https://github.com/DagnaSchmidt/Full-Stack-Open-2023-blog-list-app</br>
